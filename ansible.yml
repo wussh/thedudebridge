@@ -1,15 +1,11 @@
 ---
 - name: Docker
   hosts: all
-  vars:
-    ansible_user: engineer
-    ansible_password: domoregetmore
-    ansible_port: 22
-    ansible_become: yes
-    image_name: wushie/thedudebridge
-    compose_file: docker-compose.yml
-    endpoint: 34.101.101.11:80
   tasks:
   - name: run docker-compose.yml
-  docker_compose:
-    project_src: /.
+  dc:
+    user_data: |
+                #!/bin/sh
+                docker-compose up -d
+  wait: true
+  register: dc
