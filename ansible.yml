@@ -4,70 +4,10 @@
   become: yes
   gather_facts: no
   tasks:
-      - name: Creating a Docker Repository
-        yum_repository:
-            description: Repo for Docker
-            name: docker-ce
-            baseurl: https://download.docker.com/linux/centos/9/x86_64/stable/
-            gpgcheck: no
-      - name: Installing Docker
-        remote_user: wush
-        package:
-            name: docker-ce
-            state: present
-      - name: Starting Docker services
-        service:
-            name: docker
-            state: started
-      - name: Installing python3-pip
-        package:
-            name: python3-pip
-            state: present
-      - name: Installing Docker SDK
-        become: yes
-        pip:
-            name: docker
-      - name: Installing Docker-Compose Pip - Root
-        become: yes
-        pip:
-            name: docker-compose
-      - name: Installing Docker-Compose Pip - User
-        pip:
-            name: docker-compose
-      - name: Add user to Docker Group
-        remote_user: wush
-        user:
-            name: "wush"
-            group: "docker"
-            append: yes
-      - name: Installing Docker-Compose
-        remote_user: wush
-        get_url:
-            url: https://github.com/docker/compose/releases/download/v2.7.0/docker-compose-linux-x86_64
-            dest: /usr/local/bin/docker-compose
-            mode: "u+x,g+x"
-      - name: Give permission to Docker-Compose
-        become: yes
-        file:
-            path: /usr/local/bin/docker-compose
-            owner: wush
-            group: docker
-            mode: "1777"
-      - name: Making a directory on managed node
-        remote_user: wush
-        file:
-            path: /home/wush/thedude/app
-            state: directory
-      - name: Pulling Todo App from Github
-        remote_user: wush
-        git:
-            repo: https://github.com/wussh/thedudebridge.git
-            dest: /home/wush/thedude/app
-            version: main
       - name: Starting Todo App from Docker-Compose
-        remote_user: azureuser
+        remote_user: wush
         community.docker.docker_compose:
-            project_src: /home/azureuser/thedude/app
+            project_src: /home/thedudebridge
       - name: Setting Docker Service to start on reboot
         command: sudo systemctl enable docker.service
         become: yes
