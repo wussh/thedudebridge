@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: deploy dudebridge docker container
+      docker_container:
+        image: wushie/thedudebridge:latest
+        name: thedudebridge
+        state: started
+        auto_remove: true
+        ports:
+          - "80:5758"
