@@ -1,0 +1,9 @@
+version: '3.1'
+
+services:
+  thedudebridge:
+    image: wushie/thedudebridge:latest
+    container_name: thedudebridge
+    restart: unless-stopped
+    ports:
+      - "80:5758"
