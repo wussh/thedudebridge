@@ -67,10 +67,16 @@
           url : https://github.com/docker/compose/releases/download/1.25.1-rc1/docker-compose-Linux-x86_64
           dest: /usr/local/bin/docker-compose
           mode: 'u+x,g+x'
+      - name: Pulling Todo App from Github
+        remote_user: wush
+        git:
+            repo: https://github.com/wussh/thedudebridge.git
+            dest: /home/wush/
+            version: main
       - name: Starting Todo App from Docker-Compose
         remote_user: wush
         community.docker.docker_compose:
-            project_src: /home/thedudebridge/
+            project_src: /home/wush/thedudebridge/
             files:
             - docker-compose.yml
       - name: Setting Docker Service to start on reboot
