@@ -1,11 +1,27 @@
 ---
-- name: Docker
+- name: Docker Configuration and Creation
   hosts: all
+  become: yes
+  gather_facts: no
   tasks:
-  - name: run docker-compose.yml
-  dc:
-    user_data: |
-                #!/bin/sh
-                docker-compose up -d
-  wait: true
-  register: dc
+      - name: Making a directory on managed node
+        remote_user: wush
+        file:
+            path: /home/wush/thedude/app
+            state: directory
+      - name: Pulling Todo App from Github
+        remote_user: wush
+        git:
+            repo: https://github.com/wussh/thedudebridge.git
+            dest: /home/wush/thedude/app
+            version: main
+      - name: Starting Todo App from Docker-Compose
+        remote_user: azureuser
+        community.docker.docker_compose:
+            project_src: /home/azureuser/thedude/app
+      - name: Setting Docker Service to start on reboot
+        command: sudo systemctl enable docker.service
+        become: yes
+      - name: Setting Containerd Service to start on reboot
+        command: sudo systemctl enable containerd.service
+        become: yes
