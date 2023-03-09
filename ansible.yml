@@ -70,7 +70,9 @@
       - name: Starting Todo App from Docker-Compose
         remote_user: wush
         community.docker.docker_compose:
-            project_src: /home/wush/thedudebridge
+            project_src: /home/thedudebridge/
+            files:
+            - docker-compose.yml
       - name: Setting Docker Service to start on reboot
         command: sudo systemctl enable docker.service
         become: yes
